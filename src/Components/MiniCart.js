@@ -12,18 +12,17 @@ export default class MiniCart extends React.Component {
         super(props);
         this.toggle = this.toggle.bind(this);
         this.state = {
-            isOpen: false,productItems:Array(),cartItems:Array(),
+            isOpen: false,productItems:[],cartItems:[],
         };
     }
     toggle() {
         let{cartItems} = this.state;
         this.setState({
-            isOpen:cartItems.length ==0?false:!this.state.isOpen
+            isOpen:cartItems.length ===0?false:!this.state.isOpen
         });
     }
     componentDidMount(){
         let cartDetails = JSON.parse(localStorage.getItem("cartDetails"));
-        console.log(cartDetails);
         var isData = false;
         isData = cartDetails?true:false;
         this.setState({cartItems:isData?cartDetails:[]},()=>{Handler("GET",productUrl,null,(result)=>{this.getData(result,isData)});});
@@ -31,22 +30,22 @@ export default class MiniCart extends React.Component {
     getData(response,isData){
         let{productItems,cartItems} = this.state;
         if(response.status === 200){
-            response.data.products.map((element)=>{
+            response.data.products.forEach((element)=>{
                 element.defaultValue = 1;
                 productItems.push(element);
                 if(!isData)
                 cartItems.push(element);
             })
         }
-        cartItems.map((element)=>{
-            productItems.map((data)=>{
-                if(element.id == data.id)
+        cartItems.forEach((element)=>{
+            productItems.forEach((data)=>{
+                if(element.id === data.id)
                 data.defaultValue = element.defaultValue;
             })
         })
         this.setState({productItems,cartItems});
     }
-    setOnClick(source,key){
+    setOnClick(source,key,inputValue){
         let{productItems,cartItems} = this.state;
         var data = productItems[key];
         switch (source) {
@@ -55,21 +54,29 @@ export default class MiniCart extends React.Component {
                 if(!value) return;
                 else{
                     data.defaultValue = value;
-                    cartItems.map((element)=>{
-                        if(element.id == data.id){
-                            element.value = value;
+                    cartItems.forEach((element)=>{
+                        if(element.id === data.id){
+                            element.defaultValue = data.defaultValue;
                         }
                     })
                 }
                 break;
             case "+":
                 data.defaultValue = parseInt(data.defaultValue)+1;
-                cartItems.map((element)=>{
-                    if(element.id == data.id){
+                cartItems.forEach((element)=>{
+                    if(element.id === data.id){
                         element.defaultValue = data.defaultValue;
                     }
                 })
                 break;
+            case "onChange":
+                data.defaultValue = parseInt(inputValue);
+                cartItems.forEach((element)=>{
+                    if(element.id === data.id){
+                        element.defaultValue = data.defaultValue;
+                    }
+                })
+                break
             default:
                 break;
         }
@@ -85,7 +92,7 @@ export default class MiniCart extends React.Component {
     render() {
         let{productItems,cartItems} = this.state;
         let price = 0;
-        cartItems.map((element)=>{
+        cartItems.forEach((element)=>{
             price =price+(parseInt(element.price) * parseInt(element.defaultValue));
         })
         return (
@@ -104,8 +111,8 @@ export default class MiniCart extends React.Component {
                                 <DropdownMenu right>
                                     {cartItems.map((element,key)=>{
                                         return(
-                                            <DropdownItem>
-                                                <Row className="" key={key}>
+                                            <DropdownItem key={key}>
+                                                <Row className="">
                                                     <Col md = {2}>
                                                         <button className='btnstyle' onClick={()=>this.setOnRemove(key)}>X</button>
                                                     </Col>
@@ -147,8 +154,7 @@ export default class MiniCart extends React.Component {
                                                 allowNegative ={false}
                                                 onValueChange={(values) => {
                                                     const { value } = values;
-                                                    element.defaultValue = value;
-                                                    this.setState({ productItems });
+                                                    this.setOnClick("onChange",key,value);
                                                 }}
                                                 isAllowed={(values)=>{
                                                     const { formattedValue,floatValue } = values;
