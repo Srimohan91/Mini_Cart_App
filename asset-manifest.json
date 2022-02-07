@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Srimohan91/Mini_Cart_App.git/static/css/main.06f08552.css",
+    "main.js": "/Srimohan91/Mini_Cart_App.git/static/js/main.ad766de6.js",
+    "static/js/787.085add9b.chunk.js": "/Srimohan91/Mini_Cart_App.git/static/js/787.085add9b.chunk.js",
+    "index.html": "/Srimohan91/Mini_Cart_App.git/index.html",
+    "main.06f08552.css.map": "/Srimohan91/Mini_Cart_App.git/static/css/main.06f08552.css.map",
+    "main.ad766de6.js.map": "/Srimohan91/Mini_Cart_App.git/static/js/main.ad766de6.js.map",
+    "787.085add9b.chunk.js.map": "/Srimohan91/Mini_Cart_App.git/static/js/787.085add9b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.06f08552.css",
+    "static/js/main.ad766de6.js"
+  ]
+}
